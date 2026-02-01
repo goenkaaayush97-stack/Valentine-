@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- QR Code Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: linear-gradient(135deg, #ff4d6d, #ff8fab);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  padding: 35px 30px;
+  border-radius: 26px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  max-width: 340px;
+  width: 90%;
+  animation: fadeIn 1s ease;
+}
+
+h1 { font-size: 28px; }
+p { font-size: 16px; margin-bottom: 25px; }
+
+.buttons {
+  position: relative;
+  height: 90px;
+}
+
+button {
+  font-size: 16px;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform 0.2s;
+}
+
+button:hover { transform: scale(1.1); }
+
+#yes { background: #2ecc71; color: white; }
+#no {
+  background: #e74c3c;
+  color: white;
+  position: absolute;
+  left: 170px;
+  top: 0;
+}
+
+.music-btn {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.3);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+#qr {
+  margin-top: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Floating Hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-110vh); opacity: 0; }
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-10vh) rotate(0deg); }
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<div class="card">
+  <h1>Hey Love 💖</h1>
+  <p>
+    From my heart to this screen…<br>
+    Will you be my Valentine? 💘
+  </p>
+
+  <div class="buttons">
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 😭</button>
+  </div>
+
+  <button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
+
+  <div id="qr"></div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const music = document.getElementById("music");
+
+music.play().catch(()=>{});
+
+function toggleMusic() {
+  if (music.paused) music.play();
+  else music.pause();
+}
+
+function moveNo() {
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+yesBtn.onclick = () => {
+  document.body.innerHTML = `
+    <div style="
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,#ff4d6d,#ff8fab);
+      color:white;
+      text-align:center;
+      font-family:Poppins;">
+      <h1>YAYYY 💖🥰</h1>
+      <p>You just made me the happiest person alive 💕</p>
+    </div>
+  `;
+  launchConfetti();
+};
+
+function launchConfetti() {
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},100%,70%)`;
+    c.style.animationDelay = Math.random() * 2 + "s";
+    document.body.appendChild(c);
+  }
+}
+
+/* Floating hearts */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = Math.random() * 20 + 15 + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 500);
+
+/* QR Code */
+new QRCode(document.getElementById("qr"), {
+  text: "YOUR_LINK_HERE",
+  width: 120,
+  height: 120
+});
+</script>
+
+</body>
+</html>
